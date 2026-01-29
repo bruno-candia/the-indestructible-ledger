@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { Pool } from 'pg';
-
-export const DATABASE_POOL = 'DATABASE_POOL';
+import { AtomicTransactionRunner } from './atomic-transaction-runner';
+import { DATABASE_POOL } from './postgres.constants';
 
 const dbProvider = {
   provide: DATABASE_POOL,
@@ -18,7 +18,7 @@ const dbProvider = {
 
 @Global()
 @Module({
-  providers: [dbProvider],
-  exports: [DATABASE_POOL],
+  providers: [dbProvider, AtomicTransactionRunner],
+  exports: [DATABASE_POOL, AtomicTransactionRunner],
 })
 export class PostgresModule {}

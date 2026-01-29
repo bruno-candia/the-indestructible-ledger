@@ -5,6 +5,7 @@ import { WalletPostgresRepository } from './infrastructure/persistence/postgres/
 import { WalletRepository } from './domain/wallet/wallet.repository';
 import { WalletController } from './infrastructure/http/wallet.controller';
 import { ConfigModule } from '@nestjs/config';
+import { TransferUseCase } from './application/wallet/transfer.use-case';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), PostgresModule],
@@ -16,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       provide: WalletRepository,
       useExisting: WalletPostgresRepository,
     },
+    TransferUseCase,
   ],
 })
 export class AppModule {}

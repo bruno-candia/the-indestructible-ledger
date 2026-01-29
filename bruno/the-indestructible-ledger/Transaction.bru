@@ -1,0 +1,24 @@
+meta {
+  name: Transaction
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/transfer
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "fromId": "wallet-1",
+    "toId": "wallet-2",
+    "amount": 123
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

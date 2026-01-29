@@ -31,6 +31,20 @@ export class Wallet {
     });
   }
 
+  deposit(amount: number) {
+    this.balance += amount;
+    this.version += 1;
+  }
+
+  withdraw(amount: number) {
+    if (amount > this.balance) {
+      throw new Error('Insufficient founds');
+    }
+
+    this.balance -= amount;
+    this.version += 1;
+  }
+
   get getId(): string {
     return this.id;
   }
