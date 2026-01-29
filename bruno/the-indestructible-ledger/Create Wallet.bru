@@ -1,0 +1,22 @@
+meta {
+  name: Create Wallet
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/wallets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "minha-primeira-carteira"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

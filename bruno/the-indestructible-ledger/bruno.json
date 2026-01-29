@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "the-indestructible-ledger",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
