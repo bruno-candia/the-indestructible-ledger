@@ -10,7 +10,7 @@ export class AtomicTransactionRunner {
     const client = await this.pool.connect();
 
     try {
-      await client.query('BEGIN');
+      await client.query('BEGIN ISOLATION LEVEL READ COMMITTED');
       const result = await callback(client);
       await client.query('COMMIT');
       return result;

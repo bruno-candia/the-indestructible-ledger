@@ -10,19 +10,27 @@ export class TransferUseCase {
   ) {}
 
   async execute(fromId: string, toId: string, amount: number) {
-    await this.transaction.run(async (tx) => {
-      const fromWallet = await this.repo.findById(fromId, tx);
-      const toWallet = await this.repo.findById(toId, tx);
+    if (fromId === toId) return;
 
-      if (!fromWallet || !toWallet) {
+    if (amount <= 0) {
+      throw new Error('Invalid amount');
+    }
+
+    const [firstId, secondId] = [fromId, toId].sort();
+
+    await this.transaction.run(async (tx) => {
+      const firstWallet = await this.repo.findById(firstId, tx);
+      const secondWallet = await this.repo.findById(secondId, tx);
+
+      if (!firstWallet || !secondWallet) {
         throw new Error('Wallet not found');
       }
 
-      fromWallet.withdraw(amount);
-      toWallet.deposit(amount);
+      firstWallet.withdraw(amount);
+      secondWallet.deposit(amount);
 
-      await this.repo.save(fromWallet, tx);
-      await this.repo.save(toWallet, tx);
+      await this.repo.save(firstWallet, tx);
+      await this.repo.save(secondWallet, tx);
     });
   }
 }

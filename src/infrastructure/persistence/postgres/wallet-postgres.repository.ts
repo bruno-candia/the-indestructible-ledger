@@ -4,7 +4,7 @@ import { WalletRepository } from 'src/domain/wallet/wallet.repository';
 import { Wallet } from 'src/domain/wallet/wallet.entity';
 import { DATABASE_POOL } from './postgres.constants';
 
-interface WalletRow {
+export interface WalletRow {
   id: string;
   balance: number;
   version: number;
@@ -32,12 +32,14 @@ export class WalletPostgresRepository implements WalletRepository {
   ): Promise<Wallet | null> {
     const client = transactionManager || this.pool;
 
-    const result = await client.query(`SELECT * FROM wallets WHERE id = $1`, [
-      id,
-    ]);
+    const lockClause = transactionManager ? 'FOR UPDATE' : '';
+
+    const result = await client.query(
+      `SELECT * FROM wallets WHERE id = $1 ${lockClause}`,
+      [id],
+    );
 
     if (result.rows.length === 0) return null;
-
     const row = result.rows[0] as WalletRow;
     return Wallet.restore(row.id, row.balance, row.version);
   }
